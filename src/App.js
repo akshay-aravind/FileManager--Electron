@@ -19,35 +19,38 @@ const formatSize = (size) => {
 function App() {
   const [path, setPath] = useState(app.getAppPath())
 
-  const files = fs.readdirSync(path).map((file) => {
-    const stats = fs.statSync(pathModule.join(path, file))
-    return {
-      name: file,
-      size: stats.isFile() ? formatSize(stats.size ?? 0) : null,
-      directory: stats.isDirectory(),
-    }
-  }).sort((a, b) => {
-    if (a.directory === b.directory) {
-      return a.name.localeCompare(b.name)
-    }
-    return a.directory ? -1 : 1
-  })
+  const files = useMemo(
+    () =>
+      fs
+        .readdirSync(path)
+        .map((file) => {
+          const stats = fs.statSync(pathModule.join(path, file))
+          return {
+            name: file,
+            size: stats.isFile() ? formatSize(stats.size ?? 0) : null,
+            directory: stats.isDirectory(),
+          }
+        })
+        .sort((a, b) => {
+          if (a.directory === b.directory) {
+            return a.name.localeCompare(b.name)
+          }
+          return a.directory ? -1 : 1
+        }),
+    [path]
+  )
 
+  const onBack = () => setPath(pathModule.dirname(path))
+  const onOpen = (folder) => setPath(pathModule.join(path, folder))
+ 
+  const [searchString, setSearchString] = useState('')
+
+  const filteredFiles = files.filter(s => s.name.startsWith(searchString))
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h4>{path}</h4>
+        
       </header>
     </div>
   )
