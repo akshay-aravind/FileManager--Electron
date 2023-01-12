@@ -1,6 +1,6 @@
-import logo from "./logo.svg"
 import "./App.css"
-import { useState } from "react"
+import { useMemo, useState } from "react"
+import { FileViewer } from "./FileViewer"
 
 const fs = window.require("fs")
 const pathModule = window.require("path")
@@ -47,11 +47,15 @@ function App() {
 
   const filteredFiles = files.filter(s => s.name.startsWith(searchString))
   return (
-    <div className="App">
-      <header className="App-header">
-        <h4>{path}</h4>
-        
-      </header>
+    <div className="container mt-2">
+      <h4>{path}</h4>
+      <div className="form-group mt-4 mb-2">
+        <input value={searchString}
+          onChange={event => setSearchString(event.target.value)}
+          className="form-control form-control-sm"
+        placeholder="File search" />
+      </div>
+      <FileViewer files={filteredFiles} onBack={onBack} onOpen={onOpen} />
     </div>
   )
 }
