@@ -42,18 +42,20 @@ function App() {
 
   const onBack = () => setPath(pathModule.dirname(path))
   const onOpen = (folder) => setPath(pathModule.join(path, folder))
- 
-  const [searchString, setSearchString] = useState('')
 
-  const filteredFiles = files.filter(s => s.name.startsWith(searchString))
+  const [searchString, setSearchString] = useState("")
+
+  const filteredFiles = files.filter((s) => s.name.startsWith(searchString))
   return (
     <div className="container mt-2">
       <h4>{path}</h4>
       <div className="form-group mt-4 mb-2">
-        <input value={searchString}
-          onChange={event => setSearchString(event.target.value)}
+        <input
+          value={searchString}
+          onChange={(event) => setSearchString(event.target.value)}
           className="form-control form-control-sm"
-        placeholder="File search" />
+          placeholder="File search"
+        />
       </div>
       <FileViewer files={filteredFiles} onBack={onBack} onOpen={onOpen} />
     </div>

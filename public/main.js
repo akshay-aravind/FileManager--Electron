@@ -11,7 +11,10 @@ function createWindow() {
       enableRemoteModule: true,
     },
   })
-  win.loadURL("http://localhost:3000")
+  win.loadURL(
+    isDev ?
+      "http://localhost:3000" :
+    `file://${path.join(__dirname, '../build/index.html')}`)
 }
 app.whenReady().then(createWindow)
 
